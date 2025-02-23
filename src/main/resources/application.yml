@@ -1,1 +1,8 @@
-spring.application.name=Kafka
+spring:
+  application:
+    name: Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: test
+      auto-offset-reset: earliest
