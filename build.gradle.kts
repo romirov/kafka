@@ -1,5 +1,6 @@
 plugins {
 	kotlin("jvm") version "2.1.10"
+	kotlin("plugin.serialization") version "2.1.10"
 	kotlin("plugin.spring") version "2.1.10"
 	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
@@ -21,6 +22,7 @@ dependencies {
 	implementation("org.apache.kafka:kafka-streams")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 	implementation("io.arrow-kt:arrow-core:2.0.0")
 	implementation("io.arrow-kt:arrow-annotations:2.0.0")
 	implementation("io.arrow-kt:arrow-fx-coroutines:2.0.0")

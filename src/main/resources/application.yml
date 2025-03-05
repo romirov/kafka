@@ -3,6 +3,9 @@ spring:
     name: Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    topics: topic1
+    producer:
+      acks: all
     consumer:
       group-id: test
       auto-offset-reset: earliest
