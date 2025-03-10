@@ -3,16 +3,17 @@ package com.orshlab.kafka.util
 import com.orshlab.kafka.dto.Message
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.serializersModuleOf
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.serializer
-import java.time.LocalDateTime
-import java.util.*
 
 object JsonSerializer {
 	@OptIn(InternalSerializationApi::class)
 	private val json = Json {
-		serializersModuleOf(LocalDateTime::class.serializer())
-		serializersModuleOf(UUID::class.serializer())
+		serializersModule = SerializersModule{
+			contextual(UUIDSerializer)
+			contextual(LocalDateTimeSerializer)
+		}
 	}
 
 	@OptIn(InternalSerializationApi::class)
