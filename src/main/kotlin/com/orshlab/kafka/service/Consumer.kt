@@ -21,7 +21,6 @@ class Consumer(
 	)
 	fun listen(record: ConsumerRecord<Int, String>) {
 		val msgFromKafka = record.value()
-		println(msgFromKafka)
 		val message = JsonSerializer.deserializeFromString(msgFromKafka)
 		_testDB.add(message)
 	}

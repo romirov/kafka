@@ -1,13 +1,13 @@
 package com.orshlab.kafka
 
 import com.ocadotechnology.gembus.test.Arranger.some
-import com.orshlab.kafka.AbstractKafkaTest
 import com.orshlab.kafka.dto.Message
 import com.orshlab.kafka.service.Consumer
 import com.orshlab.kafka.service.Producer
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.Duration
 
 class KafkaTest: AbstractKafkaTest() {
 
@@ -20,6 +20,7 @@ class KafkaTest: AbstractKafkaTest() {
 	@Test
 	fun test() {
 		producer.send(msg, 1)
+		Thread.sleep(Duration.ofSeconds(5))
 		val receivedMsgs = consumer.getMessage()
 		println(consumer.getMessage())
 		Assertions.assertEquals(1, receivedMsgs.size)
