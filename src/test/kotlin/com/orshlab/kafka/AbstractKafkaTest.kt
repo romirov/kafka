@@ -1,9 +1,11 @@
 package com.orshlab.kafka
 
-import com.orshlab.kafka.config.KafkaConfig
+import com.orshlab.kafka.config.ConsumerKafkaConfig
+import com.orshlab.kafka.config.ProducerKafkaConfig
+import com.orshlab.kafka.config.StreamKafkaConfig
 import com.orshlab.kafka.config.prop.TopicsProp
-import com.orshlab.kafka.service.Consumer
-import com.orshlab.kafka.service.Producer
+import com.orshlab.kafka.service.ConsumerService
+import com.orshlab.kafka.service.ProducerService
 import com.orshlab.kafka.utils.Constants
 import org.junit.jupiter.api.TestInstance
 import org.slf4j.Logger
@@ -15,7 +17,16 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.kafka.ConfluentKafkaContainer
 
-@SpringBootTest(classes = [KafkaConfig::class, TopicsProp::class, Consumer::class, Producer::class])
+@SpringBootTest(
+	classes = [
+		ProducerKafkaConfig::class,
+		ConsumerKafkaConfig::class,
+		StreamKafkaConfig::class,
+		TopicsProp::class,
+		ConsumerService::class,
+		ProducerService::class
+	]
+)
 @EnableAutoConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Testcontainers

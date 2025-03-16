@@ -3,9 +3,16 @@ spring:
     name: Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-    topics: topic1
+    topics:
+      producer: pTopic
+      consumer: cTopic
+      table: sStoreMsgTopic
     producer:
       acks: all
     consumer:
       group-id: test
       auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval-ms: 1000
+    streams:
+      application-id: test
