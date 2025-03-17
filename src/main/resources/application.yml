@@ -13,6 +13,5 @@ spring:
       group-id: test
       auto-offset-reset: earliest
       enable-auto-commit: true
-      auto-commit-interval-ms: 1000
     streams:
       application-id: test

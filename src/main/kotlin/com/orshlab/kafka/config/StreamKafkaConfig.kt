@@ -11,7 +11,6 @@ import org.apache.kafka.streams.kstream.*
 import org.apache.kafka.streams.processor.WallclockTimestampExtractor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.FactoryBean
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -33,24 +32,20 @@ class StreamKafkaConfig(
 		mapOf(
 			StreamsConfig.APPLICATION_ID_CONFIG to properties.streams.applicationId,
 			StreamsConfig.BOOTSTRAP_SERVERS_CONFIG to properties.bootstrapServers,
-			StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG to Serdes.Integer()::class,
-			StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG to Serdes.String()::class,
-			StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG to WallclockTimestampExtractor::class
+			StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG to Serdes.Integer()::class.java,
+			StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG to Serdes.String()::class.java,
+			StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG to WallclockTimestampExtractor::class.java
 		)
 	)
 
 	@Bean
-	fun streamBuilder(streamProps: KafkaStreamsConfiguration): FactoryBean<StreamsBuilder> =
-		StreamsBuilderFactoryBean(streamProps)
-
-
-	@Bean
-	fun configurer(): StreamsBuilderFactoryBeanConfigurer =
-		StreamsBuilderFactoryBeanConfigurer { fb: StreamsBuilderFactoryBean ->
-			fb.setStateListener { newState: KafkaStreams.State?, oldState: KafkaStreams.State? ->
+	fun configurer(): StreamsBuilderFactoryBeanConfigurer {
+		return StreamsBuilderFactoryBeanConfigurer { fb: StreamsBuilderFactoryBean ->
+			fb.setStateListener{ newState: KafkaStreams.State?, oldState: KafkaStreams.State? ->
 				logger.info("State transition from $oldState to $newState")
 			}
 		}
+	}
 
 	@Bean
 	fun kStream(kStreamBuilder: StreamsBuilder): KStream<Int, String> {

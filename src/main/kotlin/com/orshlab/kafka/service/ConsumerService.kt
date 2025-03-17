@@ -16,7 +16,7 @@ class ConsumerService(
 
 	@KafkaListener(
 		id = "listen",
-		topics = ["#{@topicsProp.topics}"],
+		topics = ["#{@topicsProp.topics[T(com.orshlab.kafka.config.prop.TopicOwner).CONSUMER]}"],
 		containerFactory = "concurrentKafkaListenerContainerFactory"
 	)
 	fun listen(record: ConsumerRecord<Int, String>) {

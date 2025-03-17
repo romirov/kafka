@@ -25,7 +25,7 @@ class ConsumerKafkaConfig(
 		ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
 		ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG to "org.apache.kafka.clients.consumer.RoundRobinAssignor",
 		ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to properties.consumer.enableAutoCommit,
-		ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG to properties.consumer.autoCommitInterval,
+		ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG to "1000",
 	)
 
 	@Bean
