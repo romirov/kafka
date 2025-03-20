@@ -1,5 +1,6 @@
 package com.orshlab.kafka
 
+import com.orshlab.kafka.config.AdminKafkaConfig
 import com.orshlab.kafka.config.ConsumerKafkaConfig
 import com.orshlab.kafka.config.ProducerKafkaConfig
 import com.orshlab.kafka.config.StreamKafkaConfig
@@ -19,6 +20,7 @@ import org.testcontainers.kafka.ConfluentKafkaContainer
 
 @SpringBootTest(
 	classes = [
+		AdminKafkaConfig::class,
 		ProducerKafkaConfig::class,
 		ConsumerKafkaConfig::class,
 		StreamKafkaConfig::class,

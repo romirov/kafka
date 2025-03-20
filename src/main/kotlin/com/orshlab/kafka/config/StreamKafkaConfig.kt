@@ -41,7 +41,7 @@ class StreamKafkaConfig(
 	@Bean
 	fun configurer(): StreamsBuilderFactoryBeanConfigurer {
 		return StreamsBuilderFactoryBeanConfigurer { fb: StreamsBuilderFactoryBean ->
-			fb.setStateListener{ newState: KafkaStreams.State?, oldState: KafkaStreams.State? ->
+			fb.setStateListener { newState: KafkaStreams.State?, oldState: KafkaStreams.State? ->
 				logger.info("State transition from $oldState to $newState")
 			}
 		}
@@ -50,33 +50,34 @@ class StreamKafkaConfig(
 	@Bean
 	fun kStream(kStreamBuilder: StreamsBuilder): KStream<Int, String> {
 		val stream = kStreamBuilder.stream(
-			topicsProp.topics[TopicOwner.PRODUCER],
+			topicsProp.topics[TopicOwner.PRODUCER]?.single(),
 			Consumed.with(Serdes.Integer(), Serdes.String())
 		)
 
 		stream.mapValues(
 			ValueMapper { obj: String ->
+				logger.info("STREAM MESSAGE: $obj, TOPIC: ${topicsProp.topics[TopicOwner.PRODUCER]}")
 				val message = JsonSerializer.deserializeFromString(obj)
 				val updMsg = message.copy(author = "Heinrich Heine")
 				JsonSerializer.serializeToString(updMsg)
 			}
-		).to(topicsProp.topics[TopicOwner.CONSUMER])
+		).to(
+			topicsProp.topics[TopicOwner.CONSUMER]?.single(),
+			Produced.with(Serdes.Integer(), Serdes.String())
+		)
 
 		stream.print(Printed.toSysOut())
 
 		return stream
 	}
 
-	@Bean
-	fun kTable(kStreamBuilder: StreamsBuilder): KTable<Int, String> {
-		val table = kStreamBuilder.table(
-			topicsProp.topics
-				.getValue(TopicOwner.TABLE)
-				.single(),
-			Consumed.with(Serdes.Integer(), Serdes.String())
-		)
-		return table
-	}
+//	@Bean
+//	fun kTable(kStream: KStream<Int, String>): KTable<Int, String> {
+//		val table = kStream.mapValues { textLine ->
+//			"TABLE MESSAGE: ${textLine.lowercase().split("\\W+")}"
+//		}.toTable(Named.`as`(topicsProp.topics[TopicOwner.TABLE]?.single()))
+//		return table
+//	}
 
 	private companion object {
 		val logger: Logger = LoggerFactory.getLogger(this::class.java)
