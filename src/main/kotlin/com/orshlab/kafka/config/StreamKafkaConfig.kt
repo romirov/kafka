@@ -54,6 +54,11 @@ class StreamKafkaConfig(
 			Consumed.with(Serdes.Integer(), Serdes.String())
 		)
 
+		stream.flatMapValues { text ->
+			logger.info("TABLE MESSAGE: $text, TOPIC: ${topicsProp.topics[TopicOwner.TABLE]}")
+			text.lowercase().split("\\W+")
+		}.toTable(Materialized.`as`(topicsProp.topics[TopicOwner.TABLE]?.single()))
+
 		stream.mapValues(
 			ValueMapper { obj: String ->
 				logger.info("STREAM MESSAGE: $obj, TOPIC: ${topicsProp.topics[TopicOwner.PRODUCER]}")
@@ -70,14 +75,6 @@ class StreamKafkaConfig(
 
 		return stream
 	}
-
-//	@Bean
-//	fun kTable(kStream: KStream<Int, String>): KTable<Int, String> {
-//		val table = kStream.mapValues { textLine ->
-//			"TABLE MESSAGE: ${textLine.lowercase().split("\\W+")}"
-//		}.toTable(Named.`as`(topicsProp.topics[TopicOwner.TABLE]?.single()))
-//		return table
-//	}
 
 	private companion object {
 		val logger: Logger = LoggerFactory.getLogger(this::class.java)
